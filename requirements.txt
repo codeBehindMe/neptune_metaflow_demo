@@ -3,3 +3,4 @@ fire
 pandas
 tensorflow
 scikit-learn
+black
