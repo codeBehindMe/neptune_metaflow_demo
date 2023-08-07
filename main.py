@@ -1,9 +1,15 @@
 import fire
+from src.manager.manager import TrainManager
+from src.config.config import Config
+
+
+config = Config().load_config()
 
 
 class ModelExecutionContainer:
     def train(self):
         print("training started")
+        TrainManager()
 
     def predict(self):
         print("batch prediction started")
