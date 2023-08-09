@@ -1,12 +1,9 @@
+import neptune
+from metaflow import FlowSpec, step
+
 from src.config.config import Config
 from src.data.data import Data
-from src.model.iris_model import SVMEstimator, RFEstimator
-
-from metaflow import step
-from metaflow import FlowSpec
-
-import neptune
-
+from src.model.iris_model import RFEstimator, SVMEstimator
 
 with open(".neptune_token") as f:
     neptune_token = f.readlines()[0]
@@ -45,16 +42,34 @@ class TrainFlow(FlowSpec):
 
     @step
     def train_svm(self):
+        run = neptune.init_run(
+            project=project, with_id=self.run_id, api_token=neptune_token
+        )
+
         self.svm = SVMEstimator()
         self.svm.train(self.train_x, self.train_y)
 
+        with open("svm", "wb") as f:
+            self.svm.save(f)
+        run["svm/weights"].upload("svm")
+
+        run.stop()
         self.next(self.join)
 
     @step
     def train_rf(self):
+        run = neptune.init_run(
+            project=project, with_id=self.run_id, api_token=neptune_token
+        )
         self.rf = RFEstimator()
         self.rf.train(self.train_x, self.train_y)
-        print(self.rf.evaluate(self.test_x, self.test_y))
+
+        with open("rf", "wb") as f:
+            self.rf.save(f)
+        run["rf/weights"].upload("rf")
+
+        run.stop()
+
         self.next(self.join)
 
     @step

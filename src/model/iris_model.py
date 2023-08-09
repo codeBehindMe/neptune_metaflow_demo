@@ -1,8 +1,9 @@
 from abc import ABC
-from sklearn.metrics import accuracy_score
+
+from joblib import dump, load
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
-from joblib import load, dump
 
 
 class Estimator(ABC):
