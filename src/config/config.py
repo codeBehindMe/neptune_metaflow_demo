@@ -6,4 +6,5 @@ class Config:
         pass
 
     def load_config(self):
-        return yaml.load("config.yaml")
+        with open("config.yaml") as f:
+            return yaml.load(f, yaml.FullLoader)

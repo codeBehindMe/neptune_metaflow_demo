@@ -1,3 +1,5 @@
+from typing import Tuple
+import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
@@ -9,8 +11,8 @@ class Data:
             db.data, db.target
         )
 
-    def get_train(self):
+    def get_train(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         return self.x_train, self.y_train
 
-    def get_test(self):
+    def get_test(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         return self.x_test, self.y_test
