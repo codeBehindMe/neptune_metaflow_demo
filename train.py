@@ -1,3 +1,5 @@
+import os
+
 import neptune
 from metaflow import FlowSpec, step
 
@@ -52,6 +54,7 @@ class TrainFlow(FlowSpec):
         with open("svm", "wb") as f:
             self.svm.save(f)
         run["svm/weights"].upload("svm")
+        os.remove("svm")
 
         run.stop()
         self.next(self.join)
@@ -67,6 +70,7 @@ class TrainFlow(FlowSpec):
         with open("rf", "wb") as f:
             self.rf.save(f)
         run["rf/weights"].upload("rf")
+        os.remove("rf")
 
         run.stop()
 
