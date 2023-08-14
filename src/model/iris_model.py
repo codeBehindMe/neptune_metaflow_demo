@@ -19,6 +19,9 @@ class Estimator(ABC):
     def save(self, buffer):
         raise NotImplementedError()
 
+    def predict(self, x_predict):
+        raise NotImplementedError()
+
 
 class RFEstimator(Estimator):
     def __init__(self):
@@ -50,6 +53,12 @@ class SVMEstimator(Estimator):
 
     def save(self, buffer):
         dump(self.model, buffer)
+
+    def load(self, path):
+        self.model = load(path)
+
+    def predict(self, x_predict):
+        return self.model.predict(x_predict)
 
 
 class IrisModel:
