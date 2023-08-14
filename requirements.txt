@@ -1,9 +1,9 @@
 numpy
 fire
 pandas
-tensorflow
 scikit-learn
 black
 pyyaml
 metaflow
 isort
+neptune

@@ -1,3 +1,4 @@
+import pandas as pd
 import neptune
 from metaflow import FlowSpec, step
 
@@ -12,11 +13,28 @@ with open(".neptune_token") as f:
 project = "atillek/iris"
 
 
+def _get_latest_run(runs_table : pd.DataFrame):
+  latest_run_id =runs_table['sys/id'][0]
+  
+
 class PredictFlow(FlowSpec):
     @step
     def start(self):
         self.token = neptune_token
 
-        project = neptune.init_project(project="atillek/iris", mode="read-only")
+        neptune_project = neptune.init_project(
+            project=project, mode="read-only", api_token=neptune_token
+        )
 
-        runs_table_df = project.fetch_runs_table()
+        runs_table_df = neptune_project.fetch_runs_table().to_pandas()
+
+        print(runs_table_df["sys/id"][0])
+        self.next(self.end)
+
+    @step
+    def end(self):
+        pass
+
+
+if __name__ == "__main__":
+    PredictFlow()
